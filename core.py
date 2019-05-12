@@ -44,7 +44,7 @@ def return_list():
         link = li[i].find('a')['href']
 
         list.append('<li>' + year.strip() +
-                    ' <br />' + (url_base + link.strip())+
+                    ' <br />' + (url_base + link.strip()) +
                     ' <br />' + articles.strip() + total.strip() +
                     '</li>'
                     '<br />')
@@ -55,17 +55,21 @@ def return_list():
     return mensagem
 
 
-# script para o envio do e-mail via sendgrid
-message = Mail(
-    from_email='lvdamaceno@gmail.com',
-    to_emails='lvdamaceno@gmail.com',
-    subject='Mobex Watcher ' + str(now),
-    html_content='<h3>Lista de Processos</h3><ol>' + return_list() + '</ol>')
-try:
-    sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-    response = sg.send(message)
-    print(response.status_code)
-    print(response.body)
-    print(response.headers)
-except Exception as e:
-    print(e.message)
+def send_mail():
+    # script para o envio do e-mail via sendgrid
+    message = Mail(
+        from_email='lvdamaceno@gmail.com',
+        to_emails='lvdamaceno@gmail.com',
+        subject='Mobex Watcher ' + str(now),
+        html_content='<h3>Lista de Processos</h3><ol>' + return_list() + '</ol>')
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)
+
+
+send_mail()
