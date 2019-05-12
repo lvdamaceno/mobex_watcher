@@ -1,8 +1,10 @@
 # pip install requests
 # pip install beautifulsoup4
+# pip install sendgrid
 
 import requests
 from bs4 import BeautifulSoup
+from mail import send_message
 
 url = 'http://ciac.ufpa.br/index.php/mobilidade-academica'
 url_base = 'http://ciac.ufpa.br'
@@ -29,18 +31,22 @@ def parse_page():
 def return_list():
     i = 0
     li = parse_page()
+    list = []
     for l in li:
-        # Percorre a lista e printa cada posição formatada para leitura
+        # Percorre a lista
         year = li[i].find('a').text
         articles = li[i].find('dt').text
         total = li[i].find('dd').text
         link = li[i].find('a')['href']
 
-        print(year.strip())
-        print(articles.strip(), total.strip())
-        print(url_base + link.strip())
-        print(' ')
+        list.append('<li>' + year.strip() + ' <br />' + (url_base + link.strip())
+                    + ' <br />' + articles.strip() + total.strip() + '</li><br />')
 
         i = i + 1
 
-return_list()
+    return list
+
+
+mensagem = ''.join(return_list())
+
+send_message('Mobex Watcher', '<h3>Lista de Processos</h3><ol>' + mensagem + '</ol>')
