@@ -3,11 +3,15 @@
 # pip install sendgrid
 
 import requests
+import os
+import datetime
 from bs4 import BeautifulSoup
-from mail import send_message
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 url = 'http://ciac.ufpa.br/index.php/mobilidade-academica'
 url_base = 'http://ciac.ufpa.br'
+now = datetime.datetime.now()
 
 
 def capture_page(url):
@@ -43,10 +47,22 @@ def return_list():
                     + ' <br />' + articles.strip() + total.strip() + '</li><br />')
 
         i = i + 1
+    mensagem = ''.join(list)
 
-    return list
+    return mensagem
 
 
-mensagem = ''.join(return_list())
-
-send_message('Mobex Watcher', '<h3>Lista de Processos</h3><ol>' + mensagem + '</ol>')
+# script para o envio do e-mail via sendgrid
+message = Mail(
+    from_email='lvdamaceno@gmail.com',
+    to_emails='lvdamaceno@gmail.com',
+    subject='Mobex Watcher ' + str(now),
+    html_content='<h3>Lista de Processos</h3><ol>' + return_list() + '</ol>')
+try:
+    sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+    response = sg.send(message)
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
+except Exception as e:
+    print(e.message)
