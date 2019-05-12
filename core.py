@@ -43,8 +43,11 @@ def return_list():
         total = li[i].find('dd').text
         link = li[i].find('a')['href']
 
-        list.append('<li>' + year.strip() + ' <br />' + (url_base + link.strip())
-                    + ' <br />' + articles.strip() + total.strip() + '</li><br />')
+        list.append('<li>' + year.strip() +
+                    ' <br />' + (url_base + link.strip())+
+                    ' <br />' + articles.strip() + total.strip() +
+                    '</li>'
+                    '<br />')
 
         i = i + 1
     mensagem = ''.join(list)
