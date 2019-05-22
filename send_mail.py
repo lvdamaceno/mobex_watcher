@@ -12,7 +12,7 @@ def postbot(from_mail, to_mail, subject, content, message):
         from_email=from_mail,
         to_emails=to_mail,
         subject=subject + str(now),
-        html_content=content + message + '</ol>')
+        html_content=content + message)
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         response = sg.send(message)
