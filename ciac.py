@@ -18,7 +18,7 @@ def parse_page(u):
     return tag_li
 
 
-def return_message():
+def list_ciac():
     page_content = parse_page(url)
     mail_message = []
     for item in page_content:

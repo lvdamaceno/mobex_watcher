@@ -1,9 +1,6 @@
 import os
-import datetime
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-
-now = datetime.datetime.now()
 
 
 def postbot(from_mail, to_mail, subject, content, message):
@@ -11,7 +8,7 @@ def postbot(from_mail, to_mail, subject, content, message):
     message = Mail(
         from_email=from_mail,
         to_emails=to_mail,
-        subject=subject + str(now),
+        subject=subject,
         html_content=content + message)
     try:
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
